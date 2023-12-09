@@ -75,7 +75,7 @@ def plot_frequency_bands(signal, fs, low_fc_range, high_fc_range, title = None, 
     high_fc_fft = fft[high_fc_mask]
     high_fc = np.arange(high_fc_range[0], high_fc_range[1], ((high_fc_range[1] - high_fc_range[0]) / len(high_fc_fft)))
    
-    fft_power = ((np.abs(fft)) ** 2) / ((len(signal) * fs))
+    fft_power = ((np.abs(fft)) ** 2)
     
     plt.plot(freq, fft_power, c = 'gray', zorder = 0 )
     plt.fill_between(low_fc, np.abs(fft_power[low_fc_mask]), label = 'low frequecy band')
