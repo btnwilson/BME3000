@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Created on Thu Nov 30 10:55:48 2023
@@ -30,34 +29,30 @@ for file in files:
 
 no_peak_data = p3m.remove_peaks(data, fs, 1000)
 
-for key,val in no_peak_data.items():
-        exec(key + '=val')
-        
-mentally_stressful = mentally_stressful[:(300 * fs)]
+relaxing_sitting = no_peak_data['relaxing_sitting'] * (5/1023)
+relaxing_activity = no_peak_data['relaxing_activity'] * (5/1023)
+mentally_stressful = (no_peak_data['mentally_stressful'][:(300 * fs)]) * (5/1023)
+physically_stressful = no_peak_data['physically_stressful'] * (5/1023)
 
 
 plt.figure(1, clear = True)
 plt.title('Raw Data')
 
 plt.subplot(3,2,1)
-p3m.plot_data(relaxing_sitting,fs, 'Relaxing Sitting Signal')
+p3m.plot_data(relaxing_sitting,fs, 'Relaxing Sitting Signal', 'Volts (V)')
 plt.xlim(165,170)
-plt.ylim(-100,600)
 
 plt.subplot(3,2,2)
-p3m.plot_data(relaxing_activity, fs, 'Relaxing Activity Signal')
+p3m.plot_data(relaxing_activity, fs, 'Relaxing Activity Signal', 'Volts (V)')
 plt.xlim(255,260)
-plt.ylim(-100,600)
 
 plt.subplot(3,2,3)
-p3m.plot_data(mentally_stressful, fs, 'Mentally Stressful Signal')
+p3m.plot_data(mentally_stressful, fs, 'Mentally Stressful Signal','Volts (V)')
 plt.xlim(125,130)
-plt.ylim(-100,600)
 
 plt.subplot(3,2,4)
-p3m.plot_data(physically_stressful, fs, 'Physically Stressful Signal')
+p3m.plot_data(physically_stressful, fs, 'Physically Stressful Signal','Volts (V)')
 plt.xlim(145,150)
-plt.ylim(-100,600)
 
 
 
@@ -65,11 +60,11 @@ plt.subplot(3,1,3)
 concatenated_signal = np.concatenate([relaxing_sitting, relaxing_activity, mentally_stressful, physically_stressful])
 
 plt.title('Concatenated Signal')
-p3m.plot_data(concatenated_signal, fs, 'Concatenated Signal')
+p3m.plot_data(concatenated_signal, fs, 'Concatenated Signal', 'Volts (V)')
 plt.tight_layout()
 plt.savefig('raw_data')
 
-#%%
+#%% part 2
 # define filter perameters (band-stop filter)
 
 # low cutoff
@@ -103,17 +98,16 @@ plt.figure(3, clear = True)
 plt.subplot(2,1,1)
 p3m.plot_data(relaxing_sitting, fs, label= 'original signal')
 filt_relaxing_sitting = p3m.filter_data(relaxing_sitting, impulse_response)
-p3m.plot_data(filt_relaxing_sitting, fs, title = 'Relaxing Sitting', label = 'filtered signal')
+p3m.plot_data(filt_relaxing_sitting, fs, title = 'Relaxing Sitting', label = 'filtered signal', units = 'Volts (V)')
 plt.xlim(165,170)
-plt.ylim(-500,600)
+
 plt.grid()
 
 plt.subplot(2,1,2)
 p3m.plot_data(mentally_stressful, fs,  label = 'original signal' )
 filt_mentally_stressful = p3m.filter_data(mentally_stressful, impulse_response)
-p3m.plot_data(filt_mentally_stressful, fs, title = 'Mentally Stressful',label = 'filtered signal')
+p3m.plot_data(filt_mentally_stressful, fs, title = 'Mentally Stressful',label = 'filtered signal', units = 'Volts (V)')
 plt.xlim(125,130)
-plt.ylim(-500,600)
 plt.grid()
 
 plt.tight_layout()
@@ -124,18 +118,18 @@ plt.figure(4, clear = True)
 plt.title('Filtered Signals With Beats')
 
 plt.subplot(2,2,1)
-p3m.plot_data(filt_relaxing_sitting, fs, 'Filtered Relaxing Sitting Signal')
+p3m.plot_data(filt_relaxing_sitting, fs, 'Filtered Relaxing Sitting Signal', 'Volts (V)')
 
 plt.subplot(2,2,2)
 filt_relaxing_activity = p3m.filter_data(relaxing_activity, impulse_response)
-p3m.plot_data(filt_relaxing_activity, fs, 'Filtered Relaxing Activity Signal')
+p3m.plot_data(filt_relaxing_activity, fs, 'Filtered Relaxing Activity Signal', 'Volts (V)')
 
 plt.subplot(2,2,3)
-p3m.plot_data(filt_mentally_stressful, fs, 'Filtered Mentally Stressful Signal')
+p3m.plot_data(filt_mentally_stressful, fs, 'Filtered Mentally Stressful Signal', 'Volts (V)')
 
 plt.subplot(2,2,4)
 filt_physically_stressful = p3m.filter_data(physically_stressful,impulse_response)
-p3m.plot_data(filt_physically_stressful, fs, 'Filtered Physically Stressful Signal')
+p3m.plot_data(filt_physically_stressful, fs, 'Filtered Physically Stressful Signal', 'Volts (V)')
 
 plt.tight_layout()
 
@@ -144,16 +138,16 @@ plt.tight_layout()
 plt.figure(4)
 
 plt.subplot(2,2,1)
-relaxing_sitting_beats = p3m.find_beats(filt_relaxing_sitting, fs, flipped = True)
+relaxing_sitting_beats = p3m.find_beats(filt_relaxing_sitting, fs, 0.5, flipped = True)
 
 plt.subplot(2,2,2)
-relaxing_activity_beats = p3m.find_beats(filt_relaxing_activity, fs, flipped = True)
+relaxing_activity_beats = p3m.find_beats(filt_relaxing_activity, fs, 0.5, flipped = True)
 
 plt.subplot(2,2,3)
-mentally_stressful_beats = p3m.find_beats(filt_mentally_stressful, fs, flipped = True)
+mentally_stressful_beats = p3m.find_beats(filt_mentally_stressful, fs, 0.5,  flipped = True)
 
 plt.subplot(2,2,4)
-physically_stressful_beats = p3m.find_beats(filt_physically_stressful, fs, flipped = True)
+physically_stressful_beats = p3m.find_beats(filt_physically_stressful, fs,0.5,  flipped = True)
 
 #%% part 4
 rs_ibi, rs_hrv = p3m.hrv(relaxing_sitting_beats, fs)
@@ -168,6 +162,9 @@ plt.figure(5, clear = True)
 plt.title('Heart Rate Veriabilities')
 
 plt.bar(['relaxing sitting', 'relaxing activity', 'mentally stressful', 'physically stressful'],[rs_hrv, ra_hrv, ms_hrv, ps_hrv])
+plt.xlabel('Activity Type')
+plt.ylabel('Time (s)')
+plt.grid()
 plt.tight_layout()
 
 
@@ -202,7 +199,12 @@ plt.tight_layout()
 plt.figure(7, clear = True)
 plt.title('LF/HF Ratios')
 plt.bar(['relaxing sitting','relaxing activity','mentally stressful','physically stressful'], [rs_ratio, ra_ratio, ms_ratio, ps_ratio])
+plt.xlabel('Activity Type')
+plt.ylabel('A.U.')
+plt.grid()
 plt.tight_layout()
+
+
 
 
 
