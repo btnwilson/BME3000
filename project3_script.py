@@ -204,3 +204,5 @@ plt.title('LF/HF Ratios')
 plt.bar(['relaxing sitting','relaxing activity','mentally stressful','physically stressful'], [rs_ratio, ra_ratio, ms_ratio, ps_ratio])
 plt.tight_layout()
 
+
+
