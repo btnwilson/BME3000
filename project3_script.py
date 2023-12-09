@@ -33,6 +33,8 @@ no_peak_data = p3m.remove_peaks(data, fs, 1000)
 for key,val in no_peak_data.items():
         exec(key + '=val')
         
+mentally_stressful = mentally_stressful[:(300 * fs)]
+
 
 plt.figure(1, clear = True)
 plt.title('Raw Data')
@@ -129,11 +131,11 @@ filt_relaxing_activity = p3m.filter_data(relaxing_activity, impulse_response)
 p3m.plot_data(filt_relaxing_activity, fs, 'Filtered Relaxing Activity Signal')
 
 plt.subplot(2,2,3)
-p3m.plot_data(filt_mentally_stressful, fs, 'Filtered Relaxing Activity Signal')
+p3m.plot_data(filt_mentally_stressful, fs, 'Filtered Mentally Stressful Signal')
 
 plt.subplot(2,2,4)
 filt_physically_stressful = p3m.filter_data(physically_stressful,impulse_response)
-p3m.plot_data(filt_physically_stressful, fs, 'Filtered Relaxing Activity Signal')
+p3m.plot_data(filt_physically_stressful, fs, 'Filtered Physically Stressful Signal')
 
 plt.tight_layout()
 
@@ -182,25 +184,23 @@ ps_time = np.arange(0,len(physically_stressful) / fs, 0.1)
 ps_interp = np.interp(ps_time, physically_stressful_beats[1:] / fs, ps_ibi)
 
 plt.figure(6, clear = True)
-plt.title('Frequency Domain')
 
 plt.subplot(2,2,1)
 rs_ratio = p3m.plot_frequency_bands(rs_interp, 0.1, [0.04,0.15], [0.15,0.4], title = 'Relaxing Sitting')
-plt.ylim(0,5)
+plt.ylim(0,3000)
 plt.subplot(2,2,2)
 ra_ratio = p3m.plot_frequency_bands(ra_interp, 0.1, [0.04,0.15], [0.15,0.4], title = 'Relaxing Activity')
-plt.ylim(0,25)
+plt.ylim(0,8000)
 plt.subplot(2,2,3)
 ms_ratio = p3m.plot_frequency_bands(ms_interp, 0.1, [0.04,0.15], [0.15,0.4], title = 'Mentally Stressful')
-plt.ylim(0,5)
+plt.ylim(0,3000)
 plt.subplot(2,2,4)
 ps_ratio = p3m.plot_frequency_bands(ps_interp, 0.1, [0.04,0.15], [0.15,0.4], title = 'Physically Stressful')
-plt.ylim(0,5)
+plt.ylim(0,3000)
 plt.tight_layout()
 
 plt.figure(7, clear = True)
 plt.title('LF/HF Ratios')
 plt.bar(['relaxing sitting','relaxing activity','mentally stressful','physically stressful'], [rs_ratio, ra_ratio, ms_ratio, ps_ratio])
 plt.tight_layout()
-
 
