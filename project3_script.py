@@ -142,16 +142,16 @@ plt.tight_layout()
 plt.figure(4)
 
 plt.subplot(2,2,1)
-relaxing_sitting_beats = p3m.find_beats(filt_relaxing_sitting, fs)
+relaxing_sitting_beats = p3m.find_beats(filt_relaxing_sitting, fs, flipped = True)
 
 plt.subplot(2,2,2)
-relaxing_activity_beats = p3m.find_beats(filt_relaxing_activity, fs)
+relaxing_activity_beats = p3m.find_beats(filt_relaxing_activity, fs, flipped = True)
 
 plt.subplot(2,2,3)
-mentally_stressful_beats = p3m.find_beats(filt_mentally_stressful, fs)
+mentally_stressful_beats = p3m.find_beats(filt_mentally_stressful, fs, flipped = True)
 
 plt.subplot(2,2,4)
-physically_stressful_beats = p3m.find_beats(filt_physically_stressful, fs)
+physically_stressful_beats = p3m.find_beats(filt_physically_stressful, fs, flipped = True)
 
 #%% part 4
 rs_ibi, rs_hrv = p3m.hrv(relaxing_sitting_beats, fs)
