@@ -45,12 +45,12 @@ def filter_data(signal, impulse_response):
     
     return filtered_signal
 
-def find_beats(signal, fs, flipped = False):
+def find_beats(signal, fs, threshold, flipped = False):
     if flipped == True:
         processed_signal = signal * -1
     else:
         processed_signal = signal
-    beats, info = scipy.signal.find_peaks(processed_signal, height = 100)
+    beats, info = scipy.signal.find_peaks(processed_signal, height = threshold)
     time = np.arange(0,len(signal)/fs, 1/fs)
     plt.scatter(time[beats], signal[beats], c = 'r')
     return beats
