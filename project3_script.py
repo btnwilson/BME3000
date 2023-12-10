@@ -6,13 +6,13 @@ Created on Thu Nov 30 10:55:48 2023
 
 project3_script
 
-This script utilizes functions from project3_module. This script loads in data files from a recorded_data directory adds them into a dictionary. TThe remove_spikes function
-is called to remove large artifact spikes in the ecg data. The raw data and concatenated signal is then plotted using the plot_data function. A band-pass filter is 
-created and the impulse and frequency respinses are plotted. The filter_data function is called to filter the raw signals with the band-pass filter and two
+This script utilizes functions from project3_module. This script loads in data files from a recorded_data directory and adds them into a dictionary. The remove_spikes 
+function is called to remove large artifact spikes in the ecg data. The raw data and concatenated signal is then plotted using the plot_data function. A band-pass filter is 
+created and the impulse and frequency responses are plotted. The filter_data function is called to filter the raw signals with the band-pass filter and two
 signals are plotted to show the difference between the raw and filtered data. Then all four filtered signals are plotted on individual subplots. To determine 
-where the heart beats are the fund_beats function is called and the beats are plotted over the filtered signals. Using the beat indices the hrv function is 
+where the heart beats are the find_beats function is called and the beats are plotted over the filtered signals. Using the beat indices the hrv function is 
 called to determine the heart rate variability and inter beat intervals for all of the filtered ecg signals. The HRVs are plotted on a bar graph and the IBIs
-are interpolated with a sampling frequency of 0.1. The interpolated IBIs are passed to the plot_frequency_bands function and the frequency domains with
+are interpolated with a sampling ratae of 0.1. The interpolated IBIs are passed to the plot_frequency_bands function and the frequency domains with
 low and high-frequency bands are plotted, while the LF/HF ratios are returned. The ratios are then plotted onto a bar graph. All figures are saved. 
 """
 #%% import packages
@@ -56,29 +56,29 @@ plt.suptitle('5 Second Clips of Raw Data')
 
 # plot relaxing data and annotate within function plus zoom in on 5 second segment
 plt.subplot(3,2,1)
-p3m.plot_data(relaxing_sitting,fs, 'Relaxing Sitting Signal', 'Volts (V)')
+p3m.plot_data(relaxing_sitting,fs, 'Relaxing Sitting Signal', 'volts (V)')
 plt.xlim(165,170)
 
 # plot relaxing activity data and annotate within function plus zoom in on 5 second segment
 plt.subplot(3,2,2)
-p3m.plot_data(relaxing_activity, fs, 'Relaxing Activity Signal', 'Volts (V)')
+p3m.plot_data(relaxing_activity, fs, 'Relaxing Activity Signal', 'volts (V)')
 plt.xlim(255,260)
 
 # plot mentally stressful data and annotate within function plus zoom in on 5 second segment
 plt.subplot(3,2,3)
-p3m.plot_data(mentally_stressful, fs, 'Mentally Stressful Signal','Volts (V)')
+p3m.plot_data(mentally_stressful, fs, 'Mentally Stressful Signal','volts (V)')
 plt.xlim(125,130)
 
 # plot physically stressful data and annotate within function plus zoom in on 5 second segment
 plt.subplot(3,2,4)
-p3m.plot_data(physically_stressful, fs, 'Physically Stressful Signal','Volts (V)')
+p3m.plot_data(physically_stressful, fs, 'Physically Stressful Signal','volts (V)')
 plt.xlim(145,150)
 
 
 # plot/ create concatenated signal and annotate within function
 plt.subplot(3,1,3)
 concatenated_signal = np.concatenate([relaxing_sitting, relaxing_activity, mentally_stressful, physically_stressful])
-p3m.plot_data(concatenated_signal, fs, 'Concatenated Signal', 'Volts (V)')
+p3m.plot_data(concatenated_signal, fs, 'Concatenated Signal', 'volts (V)')
 
 # annotate concatenated signal plot
 plt.title('Concatenated Signal')
@@ -129,7 +129,7 @@ plt.suptitle('Original vs Filtered Signal Comparisons')
 plt.subplot(2,1,1)
 p3m.plot_data(relaxing_sitting, fs, label= 'original signal')
 filt_relaxing_sitting = p3m.filter_data(relaxing_sitting, impulse_response)
-p3m.plot_data(filt_relaxing_sitting, fs, title = 'Relaxing Sitting', label = 'filtered signal', units = 'Volts (V)')
+p3m.plot_data(filt_relaxing_sitting, fs, title = 'Relaxing Sitting', label = 'filtered signal', units = 'volts (V)')
 
 # zoom into 5 second segment and format plot
 plt.xlim(165,170)
@@ -140,7 +140,7 @@ plt.legend(loc = 4)
 plt.subplot(2,1,2)
 p3m.plot_data(mentally_stressful, fs,  label = 'original signal' )
 filt_mentally_stressful = p3m.filter_data(mentally_stressful, impulse_response)
-p3m.plot_data(filt_mentally_stressful, fs, title = 'Mentally Stressful',label = 'filtered signal', units = 'Volts (V)')
+p3m.plot_data(filt_mentally_stressful, fs, title = 'Mentally Stressful',label = 'filtered signal', units = 'volts (V)')
 
 # Zoom in and format plot then save the figure
 plt.xlim(125,130)
@@ -155,21 +155,21 @@ plt.suptitle('Filtered Signals With Beat Markers')
 
 # plot the filtered baseline recording
 plt.subplot(2,2,1)
-p3m.plot_data(filt_relaxing_sitting, fs, 'Filtered Relaxing Sitting Signal', 'Volts (V)')
+p3m.plot_data(filt_relaxing_sitting, fs, 'Filtered Relaxing Sitting Signal', 'volts (V)')
 
 # filter and plot the relaxing activity recording
 plt.subplot(2,2,2)
 filt_relaxing_activity = p3m.filter_data(relaxing_activity, impulse_response)
-p3m.plot_data(filt_relaxing_activity, fs, 'Filtered Relaxing Activity Signal', 'Volts (V)')
+p3m.plot_data(filt_relaxing_activity, fs, 'Filtered Relaxing Activity Signal', 'volts (V)')
 
 # plot the filtered mentally stressful activity recording
 plt.subplot(2,2,3)
-p3m.plot_data(filt_mentally_stressful, fs, 'Filtered Mentally Stressful Signal', 'Volts (V)')
+p3m.plot_data(filt_mentally_stressful, fs, 'Filtered Mentally Stressful Signal', 'volts (V)')
 
 # filter and plot the physically stressful activity recording
 plt.subplot(2,2,4)
 filt_physically_stressful = p3m.filter_data(physically_stressful,impulse_response)
-p3m.plot_data(filt_physically_stressful, fs, 'Filtered Physically Stressful Signal', 'Volts (V)')
+p3m.plot_data(filt_physically_stressful, fs, 'Filtered Physically Stressful Signal', 'volts (V)')
 
 # fit plots to figure neatly 
 plt.tight_layout()
@@ -248,27 +248,27 @@ plt.suptitle('Frequency Domains of Interpolated Inter-Beat Intervals')
 
 # compute frequency domain values of baseline and return frequency ratio using function
 plt.subplot(2,2,1)
-rs_ratio = p3m.plot_frequency_bands(rs_interp, 0.1, [0.04,0.15], [0.15,0.4], title = 'Relaxing Sitting', units = 'Power')
+rs_ratio = p3m.plot_frequency_bands(rs_interp, 0.1, [0.04,0.15], [0.15,0.4], title = 'Relaxing Sitting', units = 'power A.U.')
 # zoom into appropriate y range 
-plt.ylim(0,3000)
+plt.ylim(0,2000)
 
 # compute frequency domain values of resting activity and return frequency ratio using function
 plt.subplot(2,2,2)
-ra_ratio = p3m.plot_frequency_bands(ra_interp, 0.1, [0.04,0.15], [0.15,0.4], title = 'Relaxing Activity', units = 'Power')
+ra_ratio = p3m.plot_frequency_bands(ra_interp, 0.1, [0.04,0.15], [0.15,0.4], title = 'Relaxing Activity', units = 'power A.U.')
 # zoom into appropriate y range
 plt.ylim(0,8000)
 
 # compute frequency domain values of mentally stressful and return frequency ratio using function
 plt.subplot(2,2,3)
-ms_ratio = p3m.plot_frequency_bands(ms_interp, 0.1, [0.04,0.15], [0.15,0.4], title = 'Mentally Stressful', units = 'Power')
+ms_ratio = p3m.plot_frequency_bands(ms_interp, 0.1, [0.04,0.15], [0.15,0.4], title = 'Mentally Stressful', units = 'power A.U.')
 # zoom into appropriate y range
-plt.ylim(0,3000)
+plt.ylim(0,1000)
 
 # compute frequency domain values of physically stressful and return frequency ratio using function
 plt.subplot(2,2,4)
-ps_ratio = p3m.plot_frequency_bands(ps_interp, 0.1, [0.04,0.15], [0.15,0.4], title = 'Physically Stressful', units = 'Power')
+ps_ratio = p3m.plot_frequency_bands(ps_interp, 0.1, [0.04,0.15], [0.15,0.4], title = 'Physically Stressful', units = 'power A.U.')
 # zoom into appropriate y range and adjust plot spacings 
-plt.ylim(0,3000)
+plt.ylim(0,1000)
 plt.tight_layout()
 
 # save figure
@@ -285,5 +285,6 @@ plt.tight_layout()
 
 # save figure 
 plt.savefig('lf_hr_ratios.png')
+
 
 
